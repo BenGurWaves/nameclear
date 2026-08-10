@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Bell, Check, ChevronDown, CircleHelp, Filter, Github, LockKeyhole, Menu, Plus, Search, Settings2, ShieldCheck, X } from "lucide-react";
+import LiveCheckResults from "./pages/CheckResults";
 
 type Filing = { ticker: string; company: string; type: string; date: string; time: string; title: string; detail: string; href: string; tone: string };
 
@@ -53,5 +54,5 @@ function About() { return <><Meta title="About FilingWatch | SEC EDGAR Filing Mo
 
 function Footer() { return <footer><div className="footer-main"><Logo/><p>See the filing. Make your own call.</p><div className="footer-links"><Link to="/check-results">Check now</Link><Link to="/dashboard">Dashboard</Link><Link to="/pricing">Pricing</Link><Link to="/about">About</Link></div></div><div className="footer-bottom"><span>© 2026 FilingWatch</span><span>Data from <a href="https://www.sec.gov/edgar" target="_blank" rel="noreferrer">SEC EDGAR</a></span><span>For informational purposes only. Not investment advice.</span><a href="https://github.com" target="_blank" rel="noreferrer"><Github size={16}/></a></div></footer>; }
 
-function App() { return <BrowserRouter><Header/><Routes><Route path="/" element={<Home/>}/><Route path="/check-results" element={<CheckResults/>}/><Route path="/dashboard" element={<Dashboard/>}/><Route path="/pricing" element={<Pricing/>}/><Route path="/about" element={<About/>}/><Route path="*" element={<Home/>}/></Routes></BrowserRouter>; }
+function App() { return <BrowserRouter><Header/><Routes><Route path="/" element={<Home/>}/><Route path="/check-results" element={<LiveCheckResults/>}/><Route path="/dashboard" element={<Dashboard/>}/><Route path="/pricing" element={<Pricing/>}/><Route path="/about" element={<About/>}/><Route path="*" element={<Home/>}/></Routes></BrowserRouter>; }
 export default App;

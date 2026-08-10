@@ -1,0 +1,1 @@
+.search-state{border:1px solid var(--rule);background:var(--white);padding:22px;margin-top:28px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#737970}.search-state strong{color:var(--ink)}.error-state{border-color:#e0b6a1;background:#fff5ed}
