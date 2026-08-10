@@ -40,15 +40,13 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   if (!match) return Response.json({ error: tickerResponse.ok ? `No SEC-listed company matched “${query}”. Try a ticker such as AAPL or NVDA.` : "The SEC company directory is temporarily rate-limited. Try a major ticker such as AAPL, NVDA, or TSLA." }, { status: tickerResponse.ok ? 404 : 503 });
   if (!match) return Response.json({ error: `No SEC-listed company matched “${query}”. Try a ticker such as AAPL or NVDA.` }, { status: 404 });
   const cik = String(match.cik).padStart(10, "0");
-  const submissionsResponse = await fetch(`https://data.sec.gov/submissions/CIK${cik}.json`, { headers });
-  if (!submissionsResponse.ok) return Response.json({ error: "The SEC filing feed is unavailable right now." }, { status: 502 });
-  const submissions = await submissionsResponse.json() as { filings: { recent: Record<string, string[]> } };
-  const recent = submissions.filings.recent;
-  const filings = recent.form.map((form, index) => {
-    const accession = recent.accessionNumber[index];
-    const accessionPath = accession.replaceAll("-", "");
-    const primaryDocument = recent.primaryDocument[index];
-    return { ticker: match.ticker, company: match.name, type: form === "4" ? "Form 4" : form.replace("SCHEDULE ", ""), date: recent.filingDate[index], time: "", title: recent.primaryDocDescription[index] || form, detail: filingDescription(form), href: `https://www.sec.gov/Archives/edgar/data/${match.cik}/${accessionPath}/${primaryDocument}`, tone: form === "8-K" ? "lime" : form === "4" ? "orange" : form.includes("13") ? "blue" : "purple" };
-  }).filter((_, index) => trackedForms.has(recent.form[index])).slice(0, 20);
+  const searchResponse = await fetch(`https://efts.sec.gov/LATEST/search-index?q=${encodeURIComponent(match.name)}&forms=8-K,10-K,10-Q,4,SC%2013D,SC%2013G&from=0&size=100`, { headers });
+  if (!searchResponse.ok) return Response.json({ error: "The SEC filing feed is unavailable right now." }, { status: 502 });
+  const searchData = await searchResponse.json() as { hits: { hits: Array<{ _source: { ciks: string[]; form: string; file_date: string; adsh: string; file_description?: string; display_names?: string[] } }> } };
+  const filings = searchData.hits.hits.filter(({ _source: filing }) => filing.ciks.includes(String(match.cik).padStart(10, "0"))).map(({ _source: filing }) => {
+    const form = filing.form;
+    const accessionPath = filing.adsh.replaceAll("-", "");
+    return { ticker: match.ticker, company: match.name, type: form === "4" ? "Form 4" : form.replace("SC ", ""), date: filing.file_date, time: "", title: filing.file_description || form, detail: filingDescription(form), href: `https://www.sec.gov/Archives/edgar/data/${match.cik}/${accessionPath}/${filing.adsh}.txt`, tone: form === "8-K" ? "lime" : form === "4" ? "orange" : form.includes("13") ? "blue" : "purple" };
+  }).slice(0, 20);
   return Response.json({ ticker: match.ticker, company: match.name, cik, filings }, { headers: { "Cache-Control": "public, max-age=60" } });
 };
