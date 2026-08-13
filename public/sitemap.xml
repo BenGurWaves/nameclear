@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://decisionmath.pages.dev/</loc></url>
-  <url><loc>https://decisionmath.pages.dev/calculators/lease-vs-buy</loc></url>
-  <url><loc>https://decisionmath.pages.dev/calculators/job-offer-relocation</loc></url>
-  <url><loc>https://decisionmath.pages.dev/calculators/freelance-rate</loc></url>
-  <url><loc>https://decisionmath.pages.dev/calculators/refinance-mortgage</loc></url>
-  <url><loc>https://decisionmath.pages.dev/calculators/rent-vs-buy</loc></url>
-  <url><loc>https://decisionmath.pages.dev/convert/meter-to-kilometer</loc></url>
-  <url><loc>https://decisionmath.pages.dev/convert/kilometer-to-mile</loc></url>
-  <url><loc>https://decisionmath.pages.dev/convert/kilogram-to-pound</loc></url>
-  <url><loc>https://decisionmath.pages.dev/convert/celsius-to-fahrenheit</loc></url>
-  <url><loc>https://decisionmath.pages.dev/pricing</loc></url>
-  <url><loc>https://decisionmath.pages.dev/about</loc></url>
-  <url><loc>https://decisionmath.pages.dev/contact</loc></url>
+  <url>
+    <loc>https://nameclear.pages.dev</loc>
+    <lastmod>2026-08-13</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://nameclear.pages.dev/pricing</loc>
+    <lastmod>2026-08-13</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nameclear.pages.dev/about</loc>
+    <lastmod>2026-08-13</lastmod>
+    <priority>0.6</priority>
+  </url>
 </urlset>

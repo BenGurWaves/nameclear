@@ -2,6 +2,6 @@
   "version": 3,
   "port": 49861,
   "allocatedAt": 1786220237085,
-  "pid": 48668,
-  "serverPid": 48968
+  "pid": null,
+  "serverPid": null
 }

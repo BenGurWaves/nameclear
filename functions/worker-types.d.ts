@@ -1,4 +1,7 @@
-type PagesFunction<Env = Record<string, unknown>> = (context: {
+interface PagesFunctionContext<Env = Record<string, unknown>> {
   request: Request;
   env: Env;
-}) => Response | Promise<Response>;
+  waitUntil: (promise: Promise<unknown>) => void;
+}
+
+type PagesFunction<Env = Record<string, unknown>> = (context: PagesFunctionContext<Env>) => Response | Promise<Response>;

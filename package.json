@@ -1,28 +1,41 @@
 {
-  "name": "tempo-tutorial",
+  "name": "nameclear",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && tsc -p functions/tsconfig.json --noEmit && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "api": "wrangler pages dev dist --port 8788",
+    "dev:full": "npm run build:client && concurrently -k \"vite\" \"wrangler pages dev dist --port 8788\"",
+    "build": "npm run build:client && npm run build:sitemap",
+    "build:client": "tsc -p tsconfig.app.json && tsc -p tsconfig.server.json --noEmit && vite build",
+    "build:sitemap": "node scripts/generate-sitemap.mjs",
+    "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.server.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "wrangler pages dev dist --port 8788",
+    "deploy": "npm run build && wrangler pages deploy dist"
   },
   "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.1.0",
+    "@fontsource/space-grotesk": "^5.1.0",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-popover": "^1.1.4",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.6",
+    "@supabase/supabase-js": "^2.45.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.16.0",
     "lucide-react": "^0.469.0",
+    "pdf-lib": "^1.17.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.1",
     "recharts": "^2.15.0",
+    "resend": "^4.0.0",
+    "stripe": "^18.0.0",
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
@@ -31,11 +44,14 @@
     "@types/react": "^18.3.14",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.0.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^4.3.0",
     "tempo-sdk": "latest",
     "typescript": "^5.7.2",
-    "vite": "^6.0.7"
+    "vite": "^6.0.7",
+    "vitest": "^3.0.0",
+    "wrangler": "^4.0.0"
   },
   "packageManager": "pnpm@10.32.1"
 }

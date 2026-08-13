@@ -7,6 +7,13 @@ dist-ssr
 .vite/
 tempo/.vite/
 *.local
+# Secrets (never commit)
+.env
+.env.local
+.env.*.local
+.dev.vars
+# Wrangler / Pages
+.wrangler/
 # Editor / OS
 .DS_Store
 .vscode/*

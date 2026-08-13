@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f6f1e7" />
+  <rect x="0" y="0" width="1200" height="18" fill="#12110f" />
+  <rect x="0" y="612" width="1200" height="18" fill="#12110f" />
+  <text x="80" y="110" font-family="Menlo, monospace" font-size="26" font-weight="700" fill="#12110f" letter-spacing="4">NAMECLEAR®</text>
+  <text x="80" y="170" font-family="Menlo, monospace" font-size="20" fill="#f75f00" letter-spacing="3">NAME INSPECTOR · LIVE CHECKS</text>
+  <text x="80" y="300" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="96" fill="#12110f">Is your brand name</text>
+  <text x="80" y="400" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="96" fill="#f75f00">available?</text>
+  <text x="80" y="460" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="60" fill="#12110f">Check everywhere, at once.</text>
+  <text x="80" y="540" font-family="Menlo, monospace" font-size="22" fill="#12110f" opacity="0.7">.com .co .io .net .app · USPTO trademark register · X · Instagram · TikTok · YouTube</text>
+  <rect x="1030" y="160" width="90" height="90" fill="#f75f00" />
+  <text x="1075" y="222" font-family="Menlo, monospace" font-size="44" font-weight="700" text-anchor="middle" fill="#f6f1e7">N</text>
+</svg>

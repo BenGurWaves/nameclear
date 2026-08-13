@@ -3,9 +3,15 @@ Allow: /
 
 User-agent: GPTBot
 Allow: /
+
 User-agent: ClaudeBot
 Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://decisionmath.pages.dev/sitemap.xml
+User-agent: CCBot
+Allow: /

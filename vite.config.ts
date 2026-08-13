@@ -18,4 +18,11 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      // `npm run dev:full` runs Vite (this config) alongside
+      // `wrangler pages dev dist --port 8788`, which serves the Pages Functions.
+      "/api": "http://127.0.0.1:8788",
+    },
+  },
 });
