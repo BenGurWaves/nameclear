@@ -1,5 +1,32 @@
-import { describe, expect, it } from "vitest";
-import { normalizeSimilarity, similarityScore } from "../server/trademark";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { checkTrademark, normalizeSimilarity, similarityScore } from "../server/trademark";
+
+const hit = (overrides: Record<string, unknown>) => ({ id: "sn1", source: { wordmark: "Apple" }, ...overrides });
+
+describe("checkTrademark", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("handles a wordmark returned as a plain string (USPTO shape varies)", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({ hits: { totalValue: 1, hits: [{ id: "sn1", source: { wordmark: "APPLE" } }] } }),
+        { status: 200 },
+      ),
+    );
+    const payload = await checkTrademark("apple");
+    expect(payload.conflictsFound).toBe(true);
+    expect(payload.results[0]).toMatchObject({ mark: "APPLE", exact: true, serialNumber: "sn1" });
+  });
+
+  it("still works when the registry returns queued (202)", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("queued", { status: 202 }));
+    const payload = await checkTrademark("apple");
+    expect(payload.conflictsFound).toBe(false);
+    expect(payload.unavailable).toBe("queued");
+    expect(payload.results).toEqual([]);
+  });
+});
+
 
 describe("normalizeSimilarity", () => {
   it("normalizes case, accents, and separators", () => {

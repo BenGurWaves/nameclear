@@ -5,6 +5,12 @@ import type { CheckPart, CheckResultsJson } from "./types";
 export const CACHE_TTL_MS = 60 * 60 * 1000;
 const SUPABASE_TABLE = "search_cache";
 
+// Bump when the payload schema or check logic changes so stale Supabase rows
+// (keyed by searched_name) are ignored instead of served.
+const CACHE_KEY_VERSION = "v2";
+
+const cacheKey = (name: string): string => `${CACHE_KEY_VERSION}:${name.toLowerCase()}`;
+
 interface MemoryEntry {
   expiresAt: number;
   data: CheckResultsJson;
@@ -61,7 +67,7 @@ export async function getSupabasePart(
   const { data, error } = await client
     .from(SUPABASE_TABLE)
     .select("results_json, checked_at")
-    .eq("searched_name", name)
+    .eq("searched_name", cacheKey(name))
     .maybeSingle();
   if (error || !data || !data.results_json) return null;
   const json = data.results_json as CheckResultsJson;
@@ -83,14 +89,18 @@ export async function setSupabasePart(
   const { data } = await client
     .from(SUPABASE_TABLE)
     .select("results_json")
-    .eq("searched_name", name)
+    .eq("searched_name", cacheKey(name))
     .maybeSingle();
   const json: CheckResultsJson = data?.results_json ?? {};
   (json as Record<string, unknown>)[part] = payload;
   await client
     .from(SUPABASE_TABLE)
     .upsert(
-      { searched_name: name, results_json: json, checked_at: new Date().toISOString() },
+      {
+        searched_name: cacheKey(name),
+        results_json: json,
+        checked_at: new Date().toISOString(),
+      },
       { onConflict: "searched_name" },
     )
     .select();

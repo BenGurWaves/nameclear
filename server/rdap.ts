@@ -9,7 +9,11 @@ export const KNOWN_BASES: Record<string, string[]> = {
   app: ["https://pubapi.registry.google/rdap/"],
   dev: ["https://pubapi.registry.google/rdap/"],
   io: ["https://rdap.identitydigital.services/rdap/"],
-  co: ["https://rdap.nic.co/rdap/", "https://rdap.cointernet.com/rdap/"],
+  co: [
+    "https://rdap.identitydigital.services/rdap/",
+    "https://rdap.nic.co/rdap/",
+    "https://rdap.cointernet.com/rdap/",
+  ],
 };
 
 const FETCH_TIMEOUT_MS = 15000;
@@ -53,8 +57,8 @@ export interface RdapDomainCheck {
 
 async function queryEndpoint(base: string, domain: string): Promise<{ status: number | null; err?: string }> {
   const url = `${base.replace(/\/+$/, "/")}domain/${domain}`;
-  try {
-    const res = await fetch(url, {
+  const attempt = async (): Promise<Response> =>
+    fetch(url, {
       headers: {
         Accept: "application/rdap+json, application/json",
         "User-Agent": "NameClear/1.0 (brand availability checker)",
@@ -62,6 +66,12 @@ async function queryEndpoint(base: string, domain: string): Promise<{ status: nu
       redirect: "follow",
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
+  try {
+    let res = await attempt();
+    if (res.status === 429) {
+      await new Promise((r) => setTimeout(r, 1200));
+      res = await attempt();
+    }
     return { status: res.status };
   } catch (err) {
     return { status: null, err: String(err).slice(0, 200) };
@@ -73,17 +83,19 @@ export async function checkDomain(tld: string, domain: string): Promise<RdapDoma
   if (bases.length === 0) {
     return { domain: `${domain}.${tld}`, tld, status: "unknown", note: "No RDAP endpoint known" };
   }
+  const fqdn = `${domain}.${tld}`;
+  let reason: string | null = null;
   for (const base of bases) {
-    const { status, err } = await queryEndpoint(base, domain);
+    const { status, err } = await queryEndpoint(base, fqdn);
     if (status === 200) {
-      return { domain: `${domain}.${tld}`, tld, status: "taken" };
+      return { domain: fqdn, tld, status: "taken" };
     }
     if (status === 404) {
-      return { domain: `${domain}.${tld}`, tld, status: "available" };
+      return { domain: fqdn, tld, status: "available" };
     }
-    if (err) return { domain: `${domain}.${tld}`, tld, status: "unknown", note: "Registry unreachable" };
+    reason = err ?? (status !== null ? `HTTP ${status}` : "no response");
   }
-  return { domain: `${domain}.${tld}`, tld, status: "unknown", note: "Registry unreachable" };
+  return { domain: fqdn, tld, status: "unknown", note: reason ?? "Registry unreachable" };
 }
 
 export const REGISTER_URLS: Record<string, string> = {

@@ -89,22 +89,29 @@ async function searchMarks(name: string): Promise<TmsearchResponse> {
     signal: AbortSignal.timeout(20000),
   });
 
+  if (res.status === 202) {
+    throw new Error("tmsearch queued");
+  }
   if (!res.ok) {
     const reason =
       res.status === 403
         ? "blocked"
-        : res.status === 202
-          ? "queued"
-          : res.status === 429
-            ? "rate-limited"
-            : `http-${res.status}`;
+        : res.status === 429
+          ? "rate-limited"
+          : `http-${res.status}`;
     throw new Error(`tmsearch ${reason}`);
   }
   return (await res.json()) as TmsearchResponse;
 }
 
+function toArray(v: unknown): string[] {
+  if (Array.isArray(v)) return v.map(String);
+  if (typeof v === "string" && v.length > 0) return [v];
+  return [];
+}
+
 function cleanClasses(classes: string[] | undefined): string[] {
-  return (classes ?? [])
+  return toArray(classes)
     .map((c) => c.replace(/^IC\s+/i, "").trim())
     .filter((c) => c.length > 0);
 }
@@ -129,8 +136,7 @@ export async function checkTrademark(
   const candidates: TrademarkResult[] = [];
   for (const hit of resp?.hits?.hits ?? []) {
     const source = hit.source ?? {};
-    const raw = (source.wordmark ?? []).join(" ") || "";
-    const mark = raw.trim();
+    const mark = toArray(source.wordmark).join(" ").trim();
     if (!mark) continue;
     const norm = normalizeSimilarity(mark, mark);
     if (norm.length < 3 && !(target.length >= 3 && norm === target)) continue;
@@ -141,11 +147,11 @@ export async function checkTrademark(
     candidates.push({
       serialNumber: source.id ?? hit.id ?? "",
       mark,
-      owner: (source.ownerName ?? []).join(", ") || source.ownerFullText || "—",
-      status: (source.statusDescription ?? []).join(", ") || "Unknown",
+      owner: toArray(source.ownerName).join(", ") || source.ownerFullText || "—",
+      status: toArray(source.statusDescription).join(", ") || "Unknown",
       statusDate: source.registrationDate || source.filedDate || null,
-      classes: cleanClasses(source.internationalClass),
-      registrationNumber: (source.registrationId ?? [])[0] ?? null,
+      classes: cleanClasses(toArray(source.internationalClass)),
+      registrationNumber: toArray(source.registrationId)[0] ?? null,
       exact,
       usptoUrl: `https://tsdr.uspto.gov/documentviewer?caseId=sn${source.id ?? hit.id ?? ""}`,
     });
