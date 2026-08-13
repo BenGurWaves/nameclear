@@ -5,8 +5,12 @@ type Env = {
 
 const allowedOrigin = (request: Request, env: Env) => {
   const origin = request.headers.get("Origin");
-  const expected = env.PUBLIC_SITE_URL;
-  return Boolean(origin && expected && origin === expected);
+  if (!origin) return false;
+  const requestOrigin = new URL(request.url).origin;
+  const configuredOrigin = env.PUBLIC_SITE_URL?.replace(/\/$/, "");
+  // Accept the current Pages deployment origin and the configured canonical origin.
+  // This supports preview deployments without allowing arbitrary cross-site requests.
+  return origin === requestOrigin || (configuredOrigin ? origin === configuredOrigin : false);
 };
 
 // Stripe secret key is server-only. Never expose it to the browser bundle.
@@ -18,7 +22,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return Response.json({ error: "Invalid request origin" }, { status: 403 });
   }
 
-  const origin = env.PUBLIC_SITE_URL || new URL(request.url).origin;
+  const origin = env.PUBLIC_SITE_URL?.replace(/\/$/, "") || new URL(request.url).origin;
   const body = new URLSearchParams({
     mode: "subscription",
     // Product pricing is intentionally defined here: $4.99 USD per month.
