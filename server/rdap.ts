@@ -106,3 +106,33 @@ export const REGISTER_URLS: Record<string, string> = {
   dev: "https://domains.google/registrar/",
   co: "https://www.namecheap.com/domains/registration/results/?domain=",
 };
+
+export interface AlternativeDomain {
+  domain: string;
+  status: "available";
+  registerUrl: string | null;
+}
+
+// Suggest variants of a taken name and verify which are actually free on the
+// most popular TLDs, so alternatives in the UI/PDF are real, not guesses.
+export async function checkAlternatives(
+  slug: string,
+  variants: string[],
+  tlds: string[] = ["com", "io"],
+  max = 4,
+): Promise<AlternativeDomain[]> {
+  const found: AlternativeDomain[] = [];
+  for (const v of variants) {
+    const checks = await Promise.all(tlds.map((tld) => checkDomain(tld, v)));
+    const available = checks.find((c) => c.status === "available");
+    if (available) {
+      found.push({
+        domain: available.domain,
+        status: "available",
+        registerUrl: `${REGISTER_URLS[available.tld] ?? "https://domains.google/registrar/"}${encodeURIComponent(v)}`,
+      });
+    }
+    if (found.length >= max) break;
+  }
+  return found;
+}

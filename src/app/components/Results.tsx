@@ -94,6 +94,30 @@ export function DomainsSection({ state }: { state: PartState<DomainsPayload> }) 
               <StatusPill status={d.status} />
             </div>
           ))}
+          {state.data.alternatives && state.data.alternatives.length > 0 && (
+            <>
+              <p className="panel-note" style={{ padding: "12px 0 4px" }}>
+                Suggested alternatives — verified available right now:
+              </p>
+              {state.data.alternatives.map((a) => (
+                <div className="ledger-row" key={a.domain}>
+                  <span className="ledger-key">alt</span>
+                  <span className="ledger-value">
+                    {a.domain}
+                    {a.registerUrl && (
+                      <span className="ledger-sub">
+                        <br />
+                        <a href={a.registerUrl} target="_blank" rel="noreferrer noopener">
+                          register →
+                        </a>
+                      </span>
+                    )}
+                  </span>
+                  <StatusPill status={a.status} />
+                </div>
+              ))}
+            </>
+          )}
         </div>
       ) : (
         <p className="panel-note">Run a check to see domain availability.</p>

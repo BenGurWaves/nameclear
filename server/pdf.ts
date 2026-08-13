@@ -78,6 +78,25 @@ export async function buildReportPdf(name: string, email: string, data: CheckRes
     y -= 2;
   }
   if (domains.length === 0) row("domains", "no data", null, null);
+  const alternatives = data.domains?.alternatives ?? [];
+  if (alternatives.length > 0) {
+    y -= 4;
+    if (y < 90) {
+      const next = doc.addPage([595.28, 841.89]);
+      y = next.getSize().height - 56;
+    }
+    page.drawText("SUGGESTED ALTERNATIVES — VERIFIED AVAILABLE", { x: 56, y, size: 9, font: monoBold, color: OK });
+    y -= 16;
+    for (const a of alternatives) {
+      if (y < 90) {
+        const next = doc.addPage([595.28, 841.89]);
+        y = next.getSize().height - 56;
+      }
+      page.drawText(`-> ${a.domain}   FREE`, { x: 56, y, size: 10, font: mono, color: OK });
+      page.drawText(`   register: ${a.registerUrl ?? ""}`, { x: 56, y: y - 12, size: 8, font: mono, color: MUTED });
+      y -= 28;
+    }
+  }
   y -= 14;
 
   const tm = data.trademark;

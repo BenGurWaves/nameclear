@@ -156,7 +156,7 @@ export function Home() {
                       links — ready to download the moment payment clears.
                     </p>
                     <ul className="cta-ticks">
-                      <li>PDF delivered instantly after payment</li>
+                      <li>PDF downloads instantly after payment</li>
                       <li>Suggested domain and handle alternatives</li>
                       <li>USPTO record links for every finding</li>
                     </ul>

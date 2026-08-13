@@ -108,7 +108,7 @@ export function Pricing() {
                   <li>Complete availability ledger as a PDF</li>
                   <li>Suggested domain and handle alternatives</li>
                   <li>USPTO record links for every finding</li>
-                  <li>Emailed to you + downloadable, instantly</li>
+                  <li>Downloads instantly after payment — no email, no inbox</li>
                 </ul>
                 <Link className="btn btn-flame" to="/" style={{ alignSelf: "flex-start" }}>
                   Run a free check →

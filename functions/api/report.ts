@@ -1,5 +1,4 @@
 import { getSessionForReport } from "../../server/checkout";
-import { fulfillReport } from "../../server/fulfill";
 import { checkPart } from "../../server/check";
 import { buildReportPdf } from "../../server/pdf";
 import type { NameClearEnv } from "../../server/env";
@@ -48,21 +47,14 @@ export const onRequestGet: PagesFunction<NameClearEnv> = async ({ request, env }
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="nameclear-${name.replace(/[^a-z0-9]/gi, "")}.pdf"`,
+        "Content-Disposition": `attachment; filename="nameclear-${name.replace(/[^a-z0-9]/gi, "")}.pdf"`,
         "Cache-Control": "no-store",
       },
     });
   }
 
-  const fulfillment = paymentId
-    ? await fulfillReport(env, { name, email, paymentId })
-    : null;
-
   return json({
     paid: true,
     name,
-    pdfUrl: fulfillment?.pdfUrl ?? null,
-    stored: fulfillment?.stored ?? false,
-    reportId: fulfillment?.reportId ?? null,
   });
 };

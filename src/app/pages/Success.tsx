@@ -14,7 +14,7 @@ export function Success() {
 
   usePageMeta({
     title: "Payment complete",
-    description: "Your NameClear brand name report is on its way.",
+    description: "Your NameClear brand name report is ready to download.",
     path: "/success",
     noindex: true,
   });
@@ -31,6 +31,14 @@ export function Success() {
       })
       .catch(() => setPhase("error"));
   }, [sessionId]);
+
+  useEffect(() => {
+    if (phase !== "done") return;
+    const t = window.setTimeout(() => {
+      window.location.assign(reportDownloadUrl(sessionId));
+    }, 900);
+    return () => window.clearTimeout(t);
+  }, [phase, sessionId]);
 
   return (
     <main className="status-page">
@@ -75,7 +83,7 @@ export function Success() {
               <a href="mailto:contact@calyvent.com?subject=NameClear%20Report%20Issue">
                 contact@calyvent.com
               </a>{" "}
-              and we'll send you a fresh download link.
+              if the download isn't working.
             </p>
             <Link className="btn btn-ink" to="/">
               ← Back to check
@@ -94,7 +102,8 @@ export function Success() {
               is ready.
             </h1>
             <p className="status-copy">
-              Your report for "{status.name}" is generated and ready to download below.
+              Preparing your report — it should download automatically in a moment. If the download
+              didn't start, use the button below.
             </p>
             <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
               <a className="btn btn-flame" href={reportDownloadUrl(sessionId)}>

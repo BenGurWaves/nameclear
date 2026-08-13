@@ -8,6 +8,12 @@ export interface DomainResult {
   note?: string;
 }
 
+export interface AlternativeDomain {
+  domain: string;
+  status: CheckStatus;
+  registerUrl: string | null;
+}
+
 export interface TrademarkResult {
   serialNumber: string;
   mark: string;
@@ -32,6 +38,7 @@ export interface SocialResult {
 export interface DomainsPayload {
   name: string;
   results: DomainResult[];
+  alternatives?: AlternativeDomain[];
 }
 
 export interface TrademarkPayload {
