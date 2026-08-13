@@ -12,7 +12,7 @@ DecisionMath is a React + Vite hub of standalone financial decision calculators.
 
 ## Environment
 
-Copy `.env.example` to `.env.local`. Public browser configuration may use `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `VITE_STRIPE_PUBLISHABLE_KEY`. Keep `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID_MONTHLY`, and any Supabase service-role key server-side in Cloudflare secrets only. Stripe Checkout is created by `functions/api/create-checkout-session.ts`; the secret key never enters the browser bundle.
+Copy `.env.example` to `.env.local`. Public browser configuration may use `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `VITE_STRIPE_PUBLISHABLE_KEY`. Keep `STRIPE_SECRET_KEY` and any Supabase service-role key server-side in Cloudflare secrets only. Stripe Checkout is created by `functions/api/create-checkout-session.ts`; the secret key never enters the browser bundle. The monthly price is defined in that function as 499 cents ($4.99 USD).
 
 ## Run locally
 

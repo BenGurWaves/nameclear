@@ -1,22 +1,23 @@
 type Env = {
   STRIPE_SECRET_KEY: string;
-  STRIPE_PRICE_ID_MONTHLY: string;
   PUBLIC_SITE_URL?: string;
 };
 
 // Stripe secret key is server-only. Never expose it to the browser bundle.
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
-  if (!env.STRIPE_SECRET_KEY || !env.STRIPE_PRICE_ID_MONTHLY) {
+  if (!env.STRIPE_SECRET_KEY) {
     return Response.json({ error: "Stripe Checkout is not configured" }, { status: 500 });
-  }
-  if (!env.STRIPE_PRICE_ID_MONTHLY.startsWith("price_")) {
-    return Response.json({ error: "STRIPE_PRICE_ID_MONTHLY must be a Stripe Price ID beginning with price_, not a dollar amount." }, { status: 500 });
   }
 
   const origin = env.PUBLIC_SITE_URL || new URL(request.url).origin;
   const body = new URLSearchParams({
     mode: "subscription",
-    "line_items[0][price]": env.STRIPE_PRICE_ID_MONTHLY,
+    // Product pricing is intentionally defined here: $4.99 USD per month.
+    "line_items[0][price_data][currency]": "usd",
+    "line_items[0][price_data][unit_amount]": "499",
+    "line_items[0][price_data][recurring][interval]": "month",
+    "line_items[0][price_data][product_data][name]": "DecisionMath Plus",
+    "line_items[0][price_data][product_data][description]": "Saved scenarios, PDF exports, and scenario comparisons",
     "line_items[0][quantity]": "1",
     success_url: `${origin}/dashboard?checkout=success`,
     cancel_url: `${origin}/pricing?checkout=cancelled`,
