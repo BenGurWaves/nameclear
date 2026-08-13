@@ -6,6 +6,7 @@ export type ButtonVariant =
   | "secondary"
   | "ghost"
   | "destructive"
+  | "outline"
   | "outline-solid"
   | "ink";
 export type ButtonSize = "sm" | "md" | "lg";
@@ -35,6 +36,8 @@ const variantClasses: Record<ButtonVariant, string> = {
   destructive:
     "bg-ink hover:bg-ink-soft text-white",
   outline:
+    "bg-transparent text-ink border border-paper-deep hover:border-ink hover:bg-paper-warm/50",
+  "outline-solid":
     "bg-transparent text-ink border border-paper-deep hover:border-ink hover:bg-paper-warm/50",
 };
 

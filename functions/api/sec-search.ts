@@ -32,6 +32,7 @@ function filingDescription(form: string) {
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const query = new URL(request.url).searchParams.get("q")?.trim();
   if (!query) return Response.json({ error: "Enter a ticker or company name." }, { status: 400 });
+  if (query.length > 80 || !/^[\p{L}\p{N} .,&'()-]+$/u.test(query)) return Response.json({ error: "Search contains unsupported characters." }, { status: 400 });
   if (!env.SEC_USER_AGENT) return Response.json({ error: "SEC_USER_AGENT is not configured." }, { status: 500 });
   const headers = { "User-Agent": env.SEC_USER_AGENT, Accept: "application/json" };
   // This CDN-backed exchange index is reliable from Cloudflare edges.
@@ -55,7 +56,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const filings = searchData.hits.hits.filter(({ _source: filing }) => filing.ciks.includes(String(match.cik).padStart(10, "0"))).map(({ _source: filing }) => {
     const form = filing.form;
     const accessionPath = filing.adsh.replaceAll("-", "");
+    if (!/^[0-9]{10}-[0-9]{2}-[0-9]{6}$/.test(filing.adsh) || !trackedForms.has(form)) return null;
     return { ticker: match.ticker, company: match.name, type: form === "4" ? "Form 4" : form.replace("SC ", ""), date: filing.file_date, time: "", title: filing.file_description || form, detail: filingDescription(form), href: `https://www.sec.gov/Archives/edgar/data/${match.cik}/${accessionPath}/${filing.adsh}.txt`, tone: form === "8-K" ? "lime" : form === "4" ? "orange" : form.includes("13") ? "blue" : "purple" };
-  }).slice(0, 20);
+  }).filter((filing): filing is NonNullable<typeof filing> => filing !== null).slice(0, 20);
   return Response.json({ ticker: match.ticker, company: match.name, cik, filings }, { headers: { "Cache-Control": "public, max-age=60" } });
 };

@@ -21,5 +21,6 @@
       "@tempo/types": ["./.tempo/types.ts"]
     }
   },
-  "include": ["src", "tempo", "designs", ".tempo"]
+  "include": ["src"],
+  "exclude": ["src/tempobook"]
 }
