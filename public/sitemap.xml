@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://filingwatch.app/</loc></url>
-  <url><loc>https://filingwatch.app/check-results</loc></url>
-  <url><loc>https://filingwatch.app/pricing</loc></url>
-  <url><loc>https://filingwatch.app/about</loc></url>
+  <url><loc>https://decisionmath.app/</loc></url>
+  <url><loc>https://decisionmath.app/calculators/lease-vs-buy</loc></url>
+  <url><loc>https://decisionmath.app/calculators/job-offer-relocation</loc></url>
+  <url><loc>https://decisionmath.app/calculators/freelance-rate</loc></url>
+  <url><loc>https://decisionmath.app/calculators/refinance-mortgage</loc></url>
+  <url><loc>https://decisionmath.app/calculators/rent-vs-buy</loc></url>
+  <url><loc>https://decisionmath.app/pricing</loc></url>
+  <url><loc>https://decisionmath.app/about</loc></url>
+  <url><loc>https://decisionmath.app/contact</loc></url>
 </urlset>

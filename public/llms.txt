@@ -1,0 +1,11 @@
+# DecisionMath
+
+DecisionMath is a hub of standalone financial decision calculators. All five calculators run instantly with pure math and no external data APIs.
+
+## Main sections
+- [Calculators](https://decisionmath.app/): Lease vs buy, job offer relocation, freelance rate, mortgage refinance, and rent vs buy.
+- [Pricing](https://decisionmath.app/pricing): Free calculator use; Plus adds saved scenarios, PDF export, and comparisons.
+- [About](https://decisionmath.app/about): Product purpose and informational-use disclaimer.
+- [Contact](mailto:contact@calyvent.com?subject=DecisionMath%20Inquiry): Questions and feedback.
+
+Results are estimates for decision-support only, not financial, tax, or legal advice.

@@ -1,9 +1,11 @@
 User-agent: *
 Allow: /
+
 User-agent: GPTBot
 Allow: /
 User-agent: ClaudeBot
 Allow: /
 User-agent: PerplexityBot
 Allow: /
-Sitemap: https://filingwatch.app/sitemap.xml
+
+Sitemap: https://decisionmath.app/sitemap.xml
