@@ -149,14 +149,14 @@ export function Home() {
                 <div className="cta-grid">
                   <div>
                     <p className="cta-price">$9 · one-time · no subscription</p>
-                    <h2 className="cta-title">The full write-up, in your inbox.</h2>
+                    <h2 className="cta-title">The full write-up, yours to download.</h2>
                     <p className="cta-copy">
                       Your free check covers the essentials. The full NameClear report packages it
                       into a clean PDF — complete ledger, suggested alternatives, and USPTO record
-                      links — emailed to you the moment payment clears.
+                      links — ready to download the moment payment clears.
                     </p>
                     <ul className="cta-ticks">
-                      <li>PDF emailed to you + downloadable</li>
+                      <li>PDF delivered instantly after payment</li>
                       <li>Suggested domain and handle alternatives</li>
                       <li>USPTO record links for every finding</li>
                     </ul>

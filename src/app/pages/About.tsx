@@ -88,7 +88,7 @@ export function About() {
                 <span className="k">03 · Decide</span>
                 <span className="ledger-value">
                   Want the whole thing written up? Pay $9 once and a clean PDF — with alternatives
-                  and record links — is emailed to you.
+                  and record links — downloads instantly.
                 </span>
               </li>
             </ul>

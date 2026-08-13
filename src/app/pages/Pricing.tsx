@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const FAQS = [
   {
     q: "Why is the full report $9 and the check free?",
-    a: "The instant check hits the same live sources and is free forever — unlimited, no sign-up. The $9 is for the write-up: a clean PDF that packages the ledger, suggested alternatives, and USPTO record links, emailed to you the moment payment clears.",
+    a: "The instant check hits the same live sources and is free forever — unlimited, no sign-up. The $9 is for the write-up: a clean PDF that packages the ledger, suggested alternatives, and USPTO record links, ready to download the moment payment clears.",
   },
   {
     q: "Do I need an account?",
@@ -30,7 +30,7 @@ export function Pricing() {
   usePageMeta({
     title: "Pricing",
     description:
-      "NameClear checks are free and unlimited. The full brand name report is a one-time $9 — no subscription, PDF emailed to you after Stripe payment.",
+      "NameClear checks are free and unlimited. The full brand name report is a one-time $9 — no subscription, PDF ready to download after Stripe payment.",
     path: "/pricing",
     schemas: useMemo(
       () => [
@@ -100,7 +100,7 @@ export function Pricing() {
                   <span className="currency">$</span>9<span className="period"> one-time</span>
                 </p>
                 <p className="price-desc">
-                  The same live data, packaged into a clean PDF and emailed to you the moment
+                  The same live data, packaged into a clean PDF, ready to download the moment
                   payment clears.
                 </p>
                 <ul className="price-list">

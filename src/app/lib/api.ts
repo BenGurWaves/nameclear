@@ -36,10 +36,8 @@ export async function createCheckout(name: string): Promise<CheckoutResponse> {
 export interface ReportStatus {
   paid: boolean;
   name: string;
-  email?: string;
   pdfUrl?: string | null;
   stored?: boolean;
-  emailed?: boolean;
   reportId?: string | null;
   error?: string;
 }

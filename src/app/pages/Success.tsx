@@ -55,7 +55,7 @@ export function Success() {
             <h1 className="status-title">Payment not completed</h1>
             <p className="status-copy">
               We couldn't confirm a successful payment for this session. If you were charged, your
-              report email is on its way — otherwise run your check again and try once more.
+              report is ready — otherwise run your check again and try once more.
             </p>
             <Link className="btn btn-ink" to="/">
               ← Back to check
@@ -70,12 +70,12 @@ export function Success() {
             </div>
             <h1 className="status-title">We couldn't load your report</h1>
             <p className="status-copy">
-              This can happen if the link is stale. If you paid, your report PDF was emailed to the
-              address you entered at checkout. Contact us any time at{" "}
+              This can happen if the link is stale. If you paid, your report PDF is ready — contact
+              us any time at{" "}
               <a href="mailto:contact@calyvent.com?subject=NameClear%20Report%20Issue">
                 contact@calyvent.com
-              </a>
-              .
+              </a>{" "}
+              and we'll send you a fresh download link.
             </p>
             <Link className="btn btn-ink" to="/">
               ← Back to check
@@ -94,11 +94,7 @@ export function Success() {
               is ready.
             </h1>
             <p className="status-copy">
-              {status.emailed
-                ? `The PDF is on its way to ${status.email ?? "your inbox"} right now — and you can download it here too.`
-                : status.pdfUrl
-                  ? "The PDF is generated and ready to download below."
-                  : "Your report is ready to download below."}
+              Your report for "{status.name}" is generated and ready to download below.
             </p>
             <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
               <a className="btn btn-flame" href={reportDownloadUrl(sessionId)}>

@@ -17,15 +17,20 @@ check is free and unlimited; the full PDF write-up is a one-time **$9** via Stri
 - React 18 + TypeScript + Vite 6 + Tailwind CSS v4 (`src/app/`)
 - Cloudflare Pages Functions backend (`functions/`, shared logic in `server/`)
 - Supabase for the 1-hour check cache + paid report records + PDF storage
-- Stripe Checkout for the one-time $9 payment
-- Resend for emailing reports
+- Stripe Checkout for the one-time $9 payment (PDF delivered as a direct download)
 
 ## Environment
 
 Copy `.env.example` to `.env.local` (local) and set the same variables in Cloudflare Pages settings
-(production + preview). Only `VITE_*` values are public. `STRIPE_SECRET_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
-`RESEND_API_KEY`, and `TMSEARCH_WAF_TOKEN` are server-side secrets used only by the Pages Functions —
-never import them from `src/`.
+(production + preview). Only `VITE_*` values are public. `STRIPE_SECRET_KEY` and
+`SUPABASE_SERVICE_ROLE_KEY` are server-side secrets used only by the Pages Functions — never import
+them from `src/`. That's the whole list:
+
+- `VITE_STRIPE_PUBLISHABLE_KEY` — public Stripe publishable key
+- `VITE_SITE_URL` — canonical site URL (SEO + sitemap)
+- `STRIPE_SECRET_KEY` — Stripe secret key (the $9 price is defined in code)
+- `SUPABASE_URL` — Supabase project URL
+- `SUPABASE_SERVICE_ROLE_KEY` — Supabase service-role key
 
 To try it with zero credentials, run the dev stack and use the checker with no env vars set:
 domain/social checks work unauthenticated, and trademark returns a graceful "unavailable".
@@ -52,10 +57,9 @@ expose no public anon access — the backend uses the service-role key server-si
 npm run deploy   # typecheck + build + sitemap, then `wrangler pages deploy dist`
 ```
 
-Set the Stripe webhook (`checkout.session.completed`) to
-`https://<project>.pages.dev/api/webhook/stripe` with the `STRIPE_WEBHOOK_SECRET` configured for
-async fulfillment. The success page also fulfills on-load as a fallback, so the report is always
-delivered even if the webhook hasn't fired yet.
+After a successful Stripe payment the success page generates the PDF and serves it as a direct
+download (`/api/report?session_id=…&download=1`) — no email, no webhook. A `paid_reports` row (and
+the PDF) is also recorded in Supabase for your records.
 
 ## SEO
 

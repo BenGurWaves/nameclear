@@ -61,10 +61,8 @@ export const onRequestGet: PagesFunction<NameClearEnv> = async ({ request, env }
   return json({
     paid: true,
     name,
-    email,
     pdfUrl: fulfillment?.pdfUrl ?? null,
     stored: fulfillment?.stored ?? false,
-    emailed: fulfillment?.emailed ?? false,
     reportId: fulfillment?.reportId ?? null,
   });
 };

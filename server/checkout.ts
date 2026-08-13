@@ -23,13 +23,22 @@ export async function createCheckoutSession(
   if (!stripe) {
     throw new Error("STRIPE_SECRET_KEY not configured");
   }
-  if (!env.STRIPE_PRICE_ID) {
-    throw new Error("STRIPE_PRICE_ID not configured");
-  }
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
-    line_items: [{ price: env.STRIPE_PRICE_ID, quantity: 1 }],
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          unit_amount: 900,
+          product_data: {
+            name: "NameClear brand name report",
+            description: `Brand name report for "${input.name}"`,
+          },
+        },
+      },
+    ],
     metadata: {
       searched_name: input.name,
       app: "nameclear",

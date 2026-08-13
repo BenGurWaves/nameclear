@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import { Resend } from "resend";
 import type { NameClearEnv } from "./env";
 import { checkPart } from "./check";
 import { buildReportPdf } from "./pdf";
@@ -37,7 +36,6 @@ export interface FulfillmentResult {
   pdfUrl: string | null;
   reportId: string | null;
   stored: boolean;
-  emailed: boolean;
 }
 
 export async function fulfillReport(
@@ -86,24 +84,5 @@ export async function fulfillReport(
     if (!error && data) reportId = data.id;
   }
 
-  let emailed = false;
-  if (env.RESEND_API_KEY) {
-    try {
-      const resend = new Resend(env.RESEND_API_KEY);
-      const from = env.RESEND_FROM ?? "NameClear <reports@nameclear.pages.dev>";
-      const attachments = [{ filename: `${name}.pdf`, content: Buffer.from(pdfBytes) }];
-      await resend.emails.send({
-        from,
-        to: email,
-        subject: `Your NameClear brand name report for "${name}"`,
-        text: `Your report for "${name}" is ready.${pdfUrl ? `\nDownload: ${pdfUrl}` : "\nThe report is attached to this email."}\n\n— NameClear`,
-        attachments,
-      });
-      emailed = true;
-    } catch {
-      emailed = false;
-    }
-  }
-
-  return { name, email, paymentId, pdfUrl, reportId, stored, emailed };
+  return { name, email, paymentId, pdfUrl, reportId, stored };
 }

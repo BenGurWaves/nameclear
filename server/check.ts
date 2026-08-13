@@ -43,7 +43,7 @@ export async function checkPart(
   if (part === "domains") {
     computed = await runDomains(env, name);
   } else if (part === "trademark") {
-    computed = await checkTrademark(env, name);
+    computed = await checkTrademark(name);
   } else {
     computed = await checkSocial(name);
   }

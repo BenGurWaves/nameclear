@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const siteUrl = process.env.PUBLIC_SITE_URL || "https://nameclear.pages.dev";
+const siteUrl = process.env.VITE_SITE_URL || "https://nameclear.pages.dev";
 
 const pages = [
   { path: "", lastmod: null, priority: "1.0" },

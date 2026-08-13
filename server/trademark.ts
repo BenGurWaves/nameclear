@@ -1,4 +1,3 @@
-import type { NameClearEnv } from "./env";
 import type { TrademarkPayload, TrademarkResult } from "./types";
 
 const SEARCH_URL = "https://tmsearch.uspto.gov/prod-stage-v1-0-0/tmsearch";
@@ -61,7 +60,7 @@ export function similarityScore(a: string, b: string): number {
   return 1 - editDistance(a, b) / max;
 }
 
-async function searchMarks(env: NameClearEnv, name: string): Promise<TmsearchResponse> {
+async function searchMarks(name: string): Promise<TmsearchResponse> {
   const body = {
     query: {
       bool: {
@@ -82,9 +81,6 @@ async function searchMarks(env: NameClearEnv, name: string): Promise<TmsearchRes
     "User-Agent":
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
   };
-  if (env.TMSEARCH_WAF_TOKEN) {
-    headers.Cookie = `aws-waf-token=${env.TMSEARCH_WAF_TOKEN}`;
-  }
 
   const res = await fetch(SEARCH_URL, {
     method: "POST",
@@ -114,12 +110,11 @@ function cleanClasses(classes: string[] | undefined): string[] {
 }
 
 export async function checkTrademark(
-  env: NameClearEnv,
   name: string,
 ): Promise<TrademarkPayload> {
   let resp: TmsearchResponse;
   try {
-    resp = await searchMarks(env, name);
+    resp = await searchMarks(name);
   } catch (err) {
     const reason = err instanceof Error ? err.message.replace(/^tmsearch /, "") : "unreachable";
     return {
