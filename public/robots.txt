@@ -8,4 +8,4 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://decisionmath.app/sitemap.xml
+Sitemap: https://decisionmath.pages.dev/sitemap.xml
