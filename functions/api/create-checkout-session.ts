@@ -9,6 +9,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!env.STRIPE_SECRET_KEY || !env.STRIPE_PRICE_ID_MONTHLY) {
     return Response.json({ error: "Stripe Checkout is not configured" }, { status: 500 });
   }
+  if (!env.STRIPE_PRICE_ID_MONTHLY.startsWith("price_")) {
+    return Response.json({ error: "STRIPE_PRICE_ID_MONTHLY must be a Stripe Price ID beginning with price_, not a dollar amount." }, { status: 500 });
+  }
 
   const origin = env.PUBLIC_SITE_URL || new URL(request.url).origin;
   const body = new URLSearchParams({
